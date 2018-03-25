@@ -26,7 +26,7 @@ import           System.FilePath ((</>), FilePath)
 import           System.FilePath.Glob (glob)
 import           Filesystem.Path.CurrentOS (encodeString, decodeString)
 import qualified Filesystem.Path as P
-import           Turtle (Shell, ExitCode (..), echo, proc, procs, inproc, which, Managed, with, chmod, writable, printf, format, (%), l, pwd, cd, sh, mktree, export)
+import           Turtle (Shell, ExitCode (..), echo, proc, procs, inproc, which, Managed, with, chmod, writable, printf, (%), l, s, pwd, cd, sh, mktree, export)
 import           Turtle.Line (unsafeTextToLine)
 
 import           RewriteLibs (chain)
@@ -55,7 +55,7 @@ main opts@Options{..} = do
   checkSignature oOutput
 
   run "rm" [toText tempInstaller]
-  echo $ "Generated " <> unsafeTextToLine oOutput
+  printf ("Generated "%s%"\n") oOutput
 
   when (oTestInstaller == TestInstaller) $ do
     echo $ "--test-installer passed, will test the installer for installability"
