@@ -24,9 +24,9 @@ import qualified Data.Text as T
 import           System.Directory (copyFile, createDirectoryIfMissing, doesFileExist, renameFile)
 import           System.FilePath ((</>), FilePath)
 import           System.FilePath.Glob (glob)
-import           Filesystem.Path.CurrentOS (encodeString, decodeString)
+import           Filesystem.Path.CurrentOS (encodeString)
 import qualified Filesystem.Path as P
-import           Turtle (Shell, ExitCode (..), echo, proc, procs, inproc, which, Managed, with, chmod, writable, printf, (%), l, s, pwd, cd, sh, mktree, export)
+import           Turtle (Shell, ExitCode (..), echo, proc, procs, inproc, which, Managed, with, printf, (%), l, s, pwd, cd, sh, mktree, export)
 import           Turtle.Line (unsafeTextToLine)
 
 import           RewriteLibs (chain)
@@ -98,7 +98,7 @@ makeInstaller opts@Options{..} appRoot = do
       -- Executables
       forM ["cardano-launcher", "cardano-node"] $ \f -> do
         copyFile (bridge </> "bin" </> f) (dir </> f)
-        chmod writable (decodeString $ dir </> f)
+        procs "chmod" ["+w", toText $ dir </> f] empty
 
       -- Config files (from daedalus-bridge)
       copyFile (bridge </> "config/configuration.yaml") (dir </> "configuration.yaml")
